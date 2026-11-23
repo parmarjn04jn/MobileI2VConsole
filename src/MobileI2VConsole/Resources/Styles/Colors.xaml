@@ -55,5 +55,5 @@
     <Color x:Key="Gray600">#404040</Color>
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
-
+<Color x:Key="PageBackgroundColor">#1A1A2E</Color>
 </ResourceDictionary>
