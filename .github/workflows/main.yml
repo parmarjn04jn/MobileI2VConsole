@@ -1,0 +1,46 @@
+
+name: Build JN AI Studio Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install Android workload
+        run: dotnet workload install maui-android
+
+      - name: Restore project
+        run: dotnet restore src/MobileI2VConsole/MobileI2VConsole.csproj
+
+      - name: Build Android APK
+        run: dotnet publish src/MobileI2VConsole/MobileI2VConsole.csproj -f net10.0-android -c Debug -p:AndroidPackageFormat=apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: JN-AI-Studio-APK
+          path: src/MobileI2VConsole/bin/Debug/net10.0-android/**/*.apk
+          if-no-files-found: error
