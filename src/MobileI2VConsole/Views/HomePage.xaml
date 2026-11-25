@@ -1,136 +1,208 @@
+
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:MobileI2VConsole.ViewModels"
-             x:Class="MobileI2VConsole.Views.HomePage"
-             x:DataType="vm:HomeViewModel"
-             Title="MobileI2V"
-             BackgroundColor="{StaticResource PageBackgroundColor}">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MobileI2VConsole.ViewModels"
+    xmlns:models="clr-namespace:MobileI2VConsole.Models"
+    x:Class="MobileI2VConsole.Views.HomePage"
+    x:DataType="vm:HomeViewModel"
+    Title="JN AI Studio"
+    BackgroundColor="#101522">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="16" Padding="20">
+        <VerticalStackLayout Padding="20" Spacing="18">
 
-            <!-- Header -->
-            <Label Text="Image to Video"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   Margin="0,10,0,0" />
-            <Label Text="Transform your photos into animated videos"
-                   FontSize="14"
-                   HorizontalOptions="Center"
-                   TextColor="Gray"
-                   Margin="0,0,0,10" />
+            <Label
+                Text="JN AI Studio"
+                FontSize="30"
+                FontAttributes="Bold"
+                TextColor="#FFFFFF"
+                HorizontalOptions="Center"/>
 
-            <!-- Image Preview Area -->
-            <Border StrokeShape="RoundRectangle 16"
-                    Stroke="Gray"
-                    StrokeThickness="1"
-                    HeightRequest="300"
-                    BackgroundColor="#2A2A2A">
-                <Grid>
-                    <Image Source="{Binding ImagePreview}"
-                           Aspect="AspectFit"
-                           IsVisible="{Binding ImagePreview, Converter={x:Null}}" />
-                    <Label Text="Tap to select an image"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           TextColor="Gray"
-                           FontSize="16"
-                           IsVisible="{Binding ImagePreview, Converter={x:Null}}" />
-                </Grid>
+            <Label
+                Text="Create Images • Animate Stickman • Generate Videos"
+                FontSize="13"
+                TextColor="#B8C4D9"
+                HorizontalTextAlignment="Center"/>
+
+            <Label
+                Text="IMAGE TO VIDEO"
+                FontSize="18"
+                FontAttributes="Bold"
+                TextColor="#F5C451"/>
+
+            <Border
+                Stroke="#40516B"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 16"
+                BackgroundColor="#192438"
+                Padding="12">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="Select your image"
+                        TextColor="White"
+                        FontAttributes="Bold"/>
+
+                    <Image
+                        Source="{Binding ImagePreview}"
+                        Aspect="AspectFit"
+                        HeightRequest="220"/>
+
+                    <Button
+                        Text="📁 Choose Image from Gallery"
+                        Command="{Binding PickImageCommand}"
+                        BackgroundColor="#2864D8"
+                        TextColor="White"/>
+
+                    <Button
+                        Text="📷 Capture Image"
+                        Command="{Binding CaptureImageCommand}"
+                        BackgroundColor="#35445D"
+                        TextColor="White"/>
+
+                </VerticalStackLayout>
             </Border>
 
-            <!-- Image Source Buttons -->
-            <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
-                <Button Text="📁 Gallery"
-                        Command="{Binding PickImageCommand}"
-                        BackgroundColor="#4A90D9"
-                        TextColor="White"
-                        CornerRadius="12"
-                        Padding="16,10" />
-                <Button Text="📷 Camera"
-                        Command="{Binding CaptureImageCommand}"
-                        BackgroundColor="#4A90D9"
-                        TextColor="White"
-                        CornerRadius="12"
-                        Padding="16,10" />
-            </HorizontalStackLayout>
+            <Label
+                Text="IMAGE RATIO"
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="#F5C451"/>
 
-            <!-- Prompt Input -->
-            <Label Text="Prompt (optional)"
-                   FontSize="14"
-                   FontAttributes="Bold"
-                   Margin="0,10,0,0" />
-            <Entry Text="{Binding PromptText}"
-                   Placeholder="Describe the motion (e.g., 'waves crashing')"
-                   BackgroundColor="#2A2A2A"
-                   TextColor="White"
-                   PlaceholderColor="Gray"
-                   FontSize="14" />
+            <Picker
+                Title="Select Image Ratio"
+                SelectedItem="{Binding SelectedImageRatio}"
+                BackgroundColor="#192438"
+                TextColor="White">
+                <Picker.Items>
+                    <x:String>9:16</x:String>
+                    <x:String>16:9</x:String>
+                    <x:String>1:1</x:String>
+                    <x:String>4:5</x:String>
+                </Picker.Items>
+            </Picker>
 
-            <!-- Prompt Templates -->
-            <Label Text="Quick Templates"
-                   FontSize="12"
-                   TextColor="Gray" />
-            <CollectionView ItemsSource="{Binding PromptTemplates}"
-                            HeightRequest="50"
-                            ItemsLayout="HorizontalList">
+            <Label
+                Text="VIDEO RATIO"
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="#F5C451"/>
+
+            <Picker
+                Title="Select Video Ratio"
+                SelectedItem="{Binding SelectedVideoRatio}"
+                BackgroundColor="#192438"
+                TextColor="White">
+                <Picker.Items>
+                    <x:String>9:16</x:String>
+                    <x:String>16:9</x:String>
+                    <x:String>1:1</x:String>
+                    <x:String>4:5</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label
+                Text="Describe Your Animation"
+                FontSize="16"
+                FontAttributes="Bold"
+                TextColor="White"/>
+
+            <Editor
+                Text="{Binding PromptText}"
+                Placeholder="Describe the movement, camera and scene..."
+                PlaceholderColor="#91A0B8"
+                TextColor="White"
+                BackgroundColor="#192438"
+                HeightRequest="110"
+                AutoSize="TextChanges"/>
+
+            <Label
+                Text="QUICK PROMPTS"
+                FontSize="14"
+                FontAttributes="Bold"
+                TextColor="#F5C451"/>
+
+            <CollectionView
+                ItemsSource="{Binding PromptTemplates}"
+                HeightRequest="65"
+                ItemsLayout="HorizontalList">
+
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="vm:HomeViewModel">
-                        <Border StrokeShape="RoundRectangle 20"
-                                Stroke="#4A90D9"
-                                StrokeThickness="1"
-                                Padding="14,8"
-                                Margin="2"
-                                BackgroundColor="#1E3A5F">
+                    <DataTemplate x:DataType="models:PromptTemplate">
+                        <Border
+                            BackgroundColor="#243956"
+                            Stroke="#526D96"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="12"
+                            Margin="3">
+
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=ApplyTemplateCommand}"
-                                                      CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer
+                                    Command="{Binding
+                                        Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                        Path=BindingContext.ApplyTemplateCommand}"
+                                    CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
-                            <Label Text="{Binding Name}" FontSize="12" TextColor="White" />
+
+                            <Label
+                                Text="{Binding Name}"
+                                TextColor="White"
+                                VerticalOptions="Center"/>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!-- Model Status & Download -->
-            <Border StrokeShape="RoundRectangle 12"
-                    Stroke="#4A90D9"
-                    StrokeThickness="0.5"
-                    Padding="16"
-                    BackgroundColor="#1A1A2E"
-                    Margin="0,10,0,0">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="{Binding DownloadStatusText}"
-                           FontSize="13"
-                           TextColor="LightGray" />
-                    <ProgressBar Progress="{Binding DownloadProgress}"
-                                 ProgressColor="#4A90D9"
-                                 IsVisible="{Binding IsDownloading}"
-                                 HeightRequest="6" />
-                    <Button Text="Download Models"
-                            Command="{Binding DownloadModelsCommand}"
-                            IsVisible="{Binding IsDownloadNeeded}"
-                            BackgroundColor="#E94560"
-                            TextColor="White"
-                            CornerRadius="8"
-                            HeightRequest="40"
-                            FontSize="13"
-                            IsEnabled="{Binding IsDownloading, Converter={x:Null}}" />
+            <Border
+                BackgroundColor="#192438"
+                Stroke="#40516B"
+                StrokeShape="RoundRectangle 14"
+                Padding="14">
+
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="ONNX MODEL STATUS"
+                        FontAttributes="Bold"
+                        TextColor="#F5C451"/>
+
+                    <Label
+                        Text="{Binding DownloadStatusText}"
+                        TextColor="White"/>
+
+                    <ProgressBar
+                        Progress="{Binding DownloadProgress}"
+                        ProgressColor="#42C98A"
+                        IsVisible="{Binding IsDownloading}"/>
+
+                    <Button
+                        Text="📦 Import ONNX Models"
+                        Command="{Binding ImportModelsCommand}"
+                        BackgroundColor="#2864D8"
+                        TextColor="White"/>
+
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Generate Button -->
-            <Button Text="✨ Generate Video"
-                    Command="{Binding GenerateCommand}"
-                    BackgroundColor="#4A90D9"
-                    TextColor="White"
-                    FontSize="18"
-                    FontAttributes="Bold"
-                    CornerRadius="16"
-                    HeightRequest="56"
-                    Margin="0,10,0,20" />
+            <Button
+                Text="✨ GENERATE VIDEO"
+                Command="{Binding GenerateCommand}"
+                BackgroundColor="#E5A82E"
+                TextColor="#101522"
+                FontAttributes="Bold"
+                FontSize="18"
+                HeightRequest="58"
+                CornerRadius="14"/>
+
+            <Label
+                Text="JN AI Studio • Personal AI Creation Studio"
+                TextColor="#8391A8"
+                FontSize="11"
+                HorizontalOptions="Center"
+                Margin="0,10,0,15"/>
 
         </VerticalStackLayout>
     </ScrollView>
