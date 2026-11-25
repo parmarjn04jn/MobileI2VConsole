@@ -1,3 +1,4 @@
+
 using CommunityToolkit.Maui;
 using MobileI2VConsole.Converters;
 using MobileI2VConsole.Services;
@@ -12,6 +13,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
@@ -22,7 +24,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Services
+        // Core services
         builder.Services.AddSingleton<IFileService, FileService>();
         builder.Services.AddSingleton<IModelManager, ModelManagerService>();
         builder.Services.AddSingleton<IMediaPickerService, MediaPickerService>();
@@ -40,15 +42,18 @@ public static class MauiProgram
         builder.Services.AddTransient<ResultViewModel>();
 
         // Pages
-        builder.Services.AddTransient<Views.HomePage>();
-        builder.Services.AddTransient<Views.GenerationPage>();
-        builder.Services.AddTransient<Views.ResultPage>();
+        builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<GenerationPage>();
+        builder.Services.AddTransient<ResultPage>();
 
         // Converters
         builder.Services.AddSingleton<InverseBoolConverter>();
         builder.Services.AddSingleton<NotNullToBoolConverter>();
+        builder.Services.AddSingleton<NullToBoolConverter>();
 
-// Debug logging omitted - AddDebug requires Microsoft.Extensions.Logging.Debug package
+#if DEBUG
+        builder.Logging.AddDebug();
+#endif
 
         return builder.Build();
     }
