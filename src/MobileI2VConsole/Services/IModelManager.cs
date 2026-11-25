@@ -1,38 +1,41 @@
+
 using Microsoft.ML.OnnxRuntime;
 using MobileI2VConsole.Models;
 
 namespace MobileI2VConsole.Services;
 
 /// <summary>
-/// Manages ONNX model downloading, caching, loading, and unloading.
+/// Manages user-imported ONNX models stored in the app's private persistent directory.
+/// This app does not download model files from unverified URLs.
 /// </summary>
 public interface IModelManager
 {
-    /// <summary>Downloads all required models from HuggingFace, with progress.</summary>
-    Task<bool> DownloadModelsAsync(IProgress<ModelStatus>? progress = null,
-                                   CancellationToken ct = default);
+    Task<bool> ImportModelAsync(
+        string modelName,
+        Stream source,
+        CancellationToken ct = default);
 
-    /// <summary>Loads a specific ONNX model into memory for inference.</summary>
-    Task<bool> LoadModelAsync(string modelName, CancellationToken ct = default);
+    Task<bool> DownloadModelsAsync(
+        IProgress<ModelStatus>? progress = null,
+        CancellationToken ct = default);
 
-    /// <summary>Unloads a model to free memory.</summary>
+    Task<bool> LoadModelAsync(
+        string modelName,
+        CancellationToken ct = default);
+
     Task UnloadModelAsync(string modelName);
 
-    /// <summary>Checks if a model is downloaded and verified.</summary>
     bool IsModelDownloaded(string modelName);
 
-    /// <summary>Checks if a model is currently loaded in memory.</summary>
     bool IsModelLoaded(string modelName);
 
-    /// <summary>Gets the file path to a downloaded model.</summary>
     Task<string> GetModelPathAsync(string modelName);
 
-    /// <summary>Returns status for all models.</summary>
     IReadOnlyList<ModelStatus> GetAllStatus();
 
-    /// <summary>Deletes all cached model files.</summary>
     Task ClearCacheAsync();
 
-    /// <summary>Gets a loaded ONNX inference session for the specified model.</summary>
-    bool TryGetSession(string modelName, out InferenceSession session);
+    bool TryGetSession(
+        string modelName,
+        out InferenceSession session);
 }
